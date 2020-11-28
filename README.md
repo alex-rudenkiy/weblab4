@@ -6,7 +6,7 @@
 				docker load -i F:\myFolder\front.tar
 				docker load -i F:\myFolder\back.tar
   
-3. Перейти в директорию с docker-compose помощью команды cd
+3. Перейти в директорию с docker-compose файлом с помощью команды cd
 4. Запустить приложение с помощью команды:
 
 				docker-compose up
