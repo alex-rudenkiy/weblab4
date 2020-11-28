@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  db:
+    image: 'postgres'
+    ports:
+      - "${MY_DOCKER_IP:-127.0.0.1}:5432:5432"
+    environment:
+        POSTGRES_USER: docker
+        POSTGRES_PASSWORD: docker
+        POSTGRES_DB: docker
+
+  frontserver:
+    image: 'sample:dev'
+    ports:
+        - "${MY_DOCKER_IP:-127.0.0.1}:3000:3000"
+    tty: true
+    stdin_open: true
+    
+  backserver:
+    image: 'springio/gs-spring-boot-docker:latest'
+    ports:
+      - "${MY_DOCKER_IP:-127.0.0.1}:8181:8181"
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+    environment:
+      - MINIO_SERVER_ACCESS_KEY="AKIAIOSFODNN7EXAMPLE"
+      - MINIO_SERVER_SECRET_KEY="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+
+    
+  filestorage:
+    image: 'minio/minio'
+    command: server /data
+    ports:
+      - "${MY_DOCKER_IP:-127.0.0.1}:9000:9000"
+    environment:
+        MINIO_ACCESS_KEY: "AKIAIOSFODNN7EXAMPLE"
+        MINIO_SECRET_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
